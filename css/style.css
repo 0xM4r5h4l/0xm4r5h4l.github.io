@@ -19,11 +19,12 @@ a:hover {
 header {
   background-color: #1e1e1e;
   padding: 20px;
+  text-align: center;
 }
 
 header h1 {
   margin: 0;
-  font-size: 50px;
+  font-size: 60px;
   text-transform: uppercase;
 }
 
@@ -80,6 +81,10 @@ article h2 {
 article p {
   font-size: 20px;
   line-height: 1.5;
+}
+
+pre {
+  font-size: 30px;
 }
 
 /* Footer styles */

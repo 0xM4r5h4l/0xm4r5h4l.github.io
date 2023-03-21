@@ -1,105 +1,90 @@
 /* Global styles */
-
 body {
-  background-color: #1d1d1d;
-  color: #fff;
-  font-family: Arial, sans-serif;
+  background-color: #000000;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
   margin: 0;
-  padding: 0;
 }
 
 a {
-  color: #00bfff;
+  color: #00ff00;
   text-decoration: none;
 }
 
+a:hover {
+  border-bottom: 2px solid #00ff00;
+}
+
 /* Header styles */
-
 header {
-  background-color: #212121;
-  padding: 50px 20px;
-  text-align: center;
+  background-color: #1e1e1e;
+  padding: 20px;
 }
 
-header h2 {
+header h1 {
   margin: 0;
-}
-
-header p {
-  font-size: 18px;
-  margin-top: 20px;
+  font-size: 50px;
+  text-transform: uppercase;
 }
 
 /* Navigation styles */
-
 nav {
-  background-color: #212121;
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-nav h1 {
-  font-size: 28px;
-  margin: 0;
+  background-color: #000000;
+  padding: 10px;
 }
 
 nav ul {
-  display: flex;
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
+  text-align: center;
 }
 
 nav li {
-  margin-right: 20px;
+  display: inline-block;
+  margin-left: 20px;
 }
 
-nav li:last-child {
-  margin-right: 0;
+nav li:first-child {
+  margin-left: 0;
 }
 
 nav a {
-  color: #fff;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+nav a:hover {
+  color: #1e1e1e;
+  background-color: #00ff00;
+  padding: 10px 20px;
+  border-radius: 10px;
 }
 
 /* Main content styles */
-
 main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 50px;
+  padding: 20px;
 }
 
 article {
-  background-color: #424242;
-  border-radius: 5px;
-  margin-bottom: 40px;
+  border: 2px solid #00ff00;
   padding: 20px;
-  width: calc(33.33% - 20px);
-}
-
-article h3 {
-  font-size: 24px;
-  margin: 0 0 10px;
-}
-
-article p {
-  font-size: 16px;
-  line-height: 1.5;
   margin-bottom: 20px;
 }
 
-article a {
-  display: inline-block;
-  margin-top: 10px;
+article h2 {
+  margin-top: 0;
+  font-size: 30px;
+}
+
+article p {
+  font-size: 20px;
+  line-height: 1.5;
 }
 
 /* Footer styles */
-
 footer {
-  background-color: #212121;
+  background-color: #1e1e1e;
   padding: 20px;
   text-align: center;
 }

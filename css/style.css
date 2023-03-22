@@ -17,15 +17,16 @@ a:hover {
 
 /* Header styles */
 header {
-  background-color: #1e1e1e;
+  background-color: #000000;
   padding: 20px;
   text-align: center;
 }
 
-header h1 {
+header h2 {
   margin: 0;
-  font-size: 60px;
+  font-size: 30px;
   text-transform: uppercase;
+
 }
 
 /* Navigation styles */
@@ -34,11 +35,14 @@ nav {
   padding: 10px;
 }
 
+nav h1 {
+  margin-bottom: 0;
+}
+
 nav ul {
-  margin: 0;
+  margin: auto; /* set left and right margin to auto */
+  text-align: center; /* horizontally center its children */
   padding: 0;
-  list-style: none;
-  text-align: center;
 }
 
 nav li {
@@ -62,6 +66,16 @@ nav a:hover {
   border-radius: 10px;
 }
 
+@keyframes blink {
+      0% {opacity: 1;}
+      50% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+    
+img.blink {
+  animation: blink 4.5s infinite;
+}
+
 /* Main content styles */
 main {
   padding: 20px;
@@ -75,18 +89,18 @@ article {
 
 article h2 {
   margin-top: 0;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 article p {
   font-size: 20px;
   line-height: 1.5;
 }
-
+/*
 pre {
-  font-size: 30px;
+  font-size: 5px;
 }
-
+*/
 /* Footer styles */
 footer {
   background-color: #1e1e1e;

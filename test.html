@@ -19,10 +19,10 @@
       }
 
       if (Notification.permission === 'default') {
-        // Request permission
         Notification.requestPermission().then(function(permission) {
           if (permission === 'granted') {
             console.log('Notification permission granted.');
+            showNotification('Notifications Enabled', 'You will now receive important alerts.');
           } else {
             console.warn('Notification permission denied.');
           }
@@ -31,24 +31,25 @@
         });
       } else if (Notification.permission === 'granted') {
         console.log('Notification permission already granted.');
+        showNotification('Notifications Enabled', 'You will now receive important alerts.');
       } else {
         console.warn('Notification permission is denied.');
       }
     }
-  </script>
 
-  <!-- Register Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-          console.log('Service Worker registered with scope:', registration.scope);
-        }).catch(function(error) {
-          console.error('Service Worker registration failed:', error);
-        });
-      });
-    } else {
-      console.error('Service Worker is not supported.');
+    function showNotification(title, body) {
+      var options = {
+        body: body//,
+        //icon: '/path/to/icon.png' // Replace with path to your icon
+      };
+
+      var notification = new Notification(title, options);
+
+      // Optional: Handle click event on the notification
+      notification.onclick = function () {
+        console.log('Notification clicked.');
+        // Add your custom handling here, such as redirecting to a specific page or showing more information.
+      };
     }
   </script>
 </body>

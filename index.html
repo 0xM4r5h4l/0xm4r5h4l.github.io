@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mostafa Abdelrazek — Laravel Backend Developer</title>
+  <meta name="description"
+    content="Laravel backend developer specializing in multi-tenant SaaS architecture, service-layer design, and security-first systems." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            void:    '#090A0F',
+            surface: '#11131A',
+            ink:     '#E7E9EE',
+            mist:    '#8A91A6',
+            signal:  '#FFB454',
+            trace:   '#56D2C0',
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --void:    #090A0F;
+      --surface: #11131A;
+      --line:    rgba(148, 163, 184, 0.14);
+      --ink:     #E7E9EE;
+      --mist:    #8A91A6;
+      --signal:  #FFB454;
+      --trace:   #56D2C0;
+    }
+
+    html, body { background: var(--void); color: var(--ink); }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .hairline { border-color: var(--line) !important; }
+
+    .glow-signal { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
+    .glow-signal:hover {
+      box-shadow: 0 0 0 1px rgba(255,180,84,0.25), 0 18px 40px -16px rgba(255,180,84,0.35);
+      border-color: rgba(255,180,84,0.4) !important;
+      transform: translateY(-2px);
+    }
+
+    .glow-trace { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
+    .glow-trace:hover {
+      box-shadow: 0 0 0 1px rgba(86,210,192,0.25), 0 18px 40px -16px rgba(86,210,192,0.35);
+      border-color: rgba(86,210,192,0.4) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Animated ping dot */
+    .dot-ping { position: relative; }
+    .dot-ping::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: var(--trace);
+      animation: ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+
+    /* Terminal cursor */
+    .cursor::after {
+      content: '▌'; color: var(--trace); margin-left: 2px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* Hide Alpine x-cloak elements until JS initialises */
+    [x-cloak] { display: none !important; }
+
+    ::selection { background: rgba(86, 210, 192, 0.3); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; transform: none; opacity: 1; }
+      .dot-ping::before { animation: none; }
+    }
+  </style>
+
+  <!-- Alpine: register components BEFORE the CDN script initialises -->
+  <script>
+    document.addEventListener('alpine:init', () => {
+
+      // Hero terminal — types out architecture log lines on a loop
+      Alpine.data('terminal', () => ({
+        lines: [
+          { p: '$', t: 'php artisan tenant:resolve --domain=acme.app', c: '' },
+          { p: '✓', t: 'Tenant context bound · middleware validated',   c: 'text-trace' },
+          { p: '✓', t: 'Cache warmed · stampede jitter applied (12s)',  c: 'text-trace' },
+          { p: '✓', t: 'OAuth token verified · AES-256 decrypt',        c: 'text-signal' },
+          { p: '✓', t: 'Eloquent: 0 N+1 queries · eager loaded',        c: 'text-trace' },
+          { p: '✓', t: 'DTO mapped → Service Layer → Response (118ms)', c: 'text-signal' },
+        ],
+        visible: [],
+        init() { this.run(); },
+        run() {
+          this.visible = [];
+          let i = 0;
+          const step = () => {
+            if (i < this.lines.length) {
+              this.visible.push(this.lines[i++]);
+              setTimeout(step, 480);
+            } else {
+              setTimeout(() => this.run(), 2600);
+            }
+          };
+          step();
+        },
+      }));
+
+      // Project section tabs
+      Alpine.data('projectTabs', () => ({ tab: 'overview' }));
+
+      // Hero entrance animation flag
+      Alpine.data('heroReveal', () => ({
+        shown: false,
+        init() { setTimeout(() => (this.shown = true), 80); },
+      }));
+    });
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+</head>
+
+<body class="antialiased bg-void text-ink" x-data>
+
+  <!-- ─── NAV ──────────────────────────────────────────────────── -->
+  <header class="fixed top-0 inset-x-0 z-50">
+    <div class="max-w-[1140px] mx-auto px-6">
+      <div class="glass rounded-2xl mt-4 px-5 py-3 flex items-center justify-between">
+        <a href="#" class="font-display font-semibold text-[15px] tracking-tight">
+          0xM4r5h4l<span class="text-trace">.</span>dev
+        </a>
+        <nav class="hidden md:flex items-center gap-8 font-mono text-[12px] uppercase tracking-widest text-mist">
+          <a href="#approach" class="hover:text-ink transition">Approach</a>
+          <a href="#projects" class="hover:text-ink transition">Projects</a>
+          <a href="#stack"    class="hover:text-ink transition">Stack</a>
+          <a href="#contact"  class="hover:text-ink transition">Contact</a>
+        </nav>
+        <div class="flex items-center gap-2 font-mono text-[11px] text-mist">
+          <span class="dot-ping inline-block w-1.5 h-1.5 rounded-full bg-trace"></span>
+          OPEN_TO_REMOTE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────── -->
+  <section class="relative pt-40 pb-24 md:pt-48 md:pb-32 px-6 overflow-hidden">
+    <div class="max-w-[1140px] mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-14 items-center">
+
+      <div x-data="heroReveal" :class="shown && 'in'" class="reveal">
+        <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-5">
+          [ STATUS: BACKEND_FOCUSED ]
+        </p>
+        <h1 class="font-display font-semibold text-[40px] leading-[1.08] md:text-[58px] md:leading-[1.05] tracking-tight">
+          Laravel Backend<br />Developer, built for<br />
+          <span class="text-trace">multi-tenant</span> scale.
+        </h1>
+        <p class="mt-6 text-mist text-[16px] md:text-[17px] leading-relaxed max-w-[480px]">
+          I design and ship backend systems — tenant isolation, service-layer architecture, and
+          security primitives — for SaaS products that can't afford to get this wrong.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <a href="#projects"
+            class="font-mono text-[13px] uppercase tracking-wide bg-trace text-[#06231f] font-medium px-6 py-3 rounded-xl hover:brightness-110 transition">
+            View Architecture
+          </a>
+          <a href="#"
+            class="font-mono text-[13px] uppercase tracking-wide hairline border px-6 py-3 rounded-xl text-ink hover:bg-white/5 transition">
+            Download CV
+          </a>
+        </div>
+        <div class="mt-12 flex items-center gap-8 font-mono text-[12px] text-mist">
+          <span>PHP 8.2+</span>
+          <span class="w-1 h-1 rounded-full bg-mist/40"></span>
+          <span>Laravel 12</span>
+          <span class="w-1 h-1 rounded-full bg-mist/40"></span>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div x-data="terminal" class="glass rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+        <div class="flex items-center gap-2 px-4 py-3 border-b hairline border">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#28c840]"></span>
+          <span class="font-mono text-[11px] text-mist ml-3">tenant-resolver — zsh</span>
+        </div>
+        <div class="p-5 font-mono text-[13px] leading-[1.9] min-h-[260px]">
+          <template x-for="(line, idx) in visible" :key="idx">
+            <div>
+              <span :class="line.p === '$' ? 'text-mist' : line.c">
+                [<span x-text="line.p"></span>]
+              </span>
+              <span :class="line.c || 'text-ink'" x-text="' ' + line.t"></span>
+            </div>
+          </template>
+          <span class="cursor"></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── APPROACH ─────────────────────────────────────────────── -->
+  <section id="approach" class="px-6 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto">
+      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">[ 01 ] Approach</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
+        Architecture decisions, not just working code.
+      </h2>
+      <div class="mt-12 grid md:grid-cols-3 gap-6">
+
+        <div class="glass glow-signal rounded-2xl p-7">
+          <span class="font-mono text-[11px] text-signal">[ TYPE_SAFETY ]</span>
+          <h3 class="font-display font-medium text-[18px] mt-4">DTOs over arrays</h3>
+          <p class="text-mist text-[14px] mt-3 leading-relaxed">
+            Data crossing a layer boundary is typed and validated at the edge — not a
+            loosely-shaped array that breaks silently three calls later.
+          </p>
+        </div>
+
+        <div class="glass glow-trace rounded-2xl p-7">
+          <span class="font-mono text-[11px] text-trace">[ SEPARATION ]</span>
+          <h3 class="font-display font-medium text-[18px] mt-4">Service Layer</h3>
+          <p class="text-mist text-[14px] mt-3 leading-relaxed">
+            Controllers stay thin. Business logic lives in services that are testable
+            in isolation from HTTP and Eloquent.
+          </p>
+        </div>
+
+        <div class="glass glow-signal rounded-2xl p-7">
+          <span class="font-mono text-[11px] text-signal">[ SECURITY_FIRST ]</span>
+          <h3 class="font-display font-medium text-[18px] mt-4">Assume hostile tenants</h3>
+          <p class="text-mist text-[14px] mt-3 leading-relaxed">
+            Multi-tenant systems fail at the boundary between tenants. I design
+            isolation as the default, not a patch.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ─────────────────────────────────────────────── -->
+  <section id="projects" class="px-6 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto">
+      <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">[ 02 ] Projects</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
+        The system this whole site is talking about.
+      </h2>
+
+      <div x-data="projectTabs" class="mt-12 glass rounded-2xl overflow-hidden">
+
+        <div class="flex items-center justify-between flex-wrap gap-4 px-7 pt-7">
+          <div>
+            <h3 class="font-display font-medium text-[20px]">Multi-Tenant SaaS Platform</h3>
+            <p class="text-mist text-[13px] mt-1">
+              Enterprise engagement · NDA — architecture described, implementation private
+            </p>
+          </div>
+          <span class="font-mono text-[11px] uppercase tracking-wide px-3 py-1.5 rounded-full hairline border text-mist">
+            Confidential / Production
+          </span>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-1 px-7 mt-7 font-mono text-[12px] uppercase tracking-wide overflow-x-auto">
+          <button @click="tab='overview'"
+            :class="tab==='overview' ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Overview</button>
+          <button @click="tab='architecture'"
+            :class="tab==='architecture' ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Architecture</button>
+          <button @click="tab='security'"
+            :class="tab==='security' ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Security</button>
+          <button @click="tab='performance'"
+            :class="tab==='performance' ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Performance</button>
+        </div>
+
+        <!-- Tab panels -->
+        <div class="px-7 py-8 border-t hairline border mt-1">
+
+          <div x-show="tab==='overview'" x-cloak>
+            <p class="text-mist text-[15px] leading-relaxed max-w-[680px]">
+              A multi-tenant SaaS platform supporting three distinct roles — System Owner, Merchant,
+              and Client — each operating within strictly scoped permissions, data, and workflows.
+              Built to handle onboarding, inventory, and order logic at a structure similar to
+              Shopify's tenancy model.
+            </p>
+          </div>
+
+          <div x-show="tab==='architecture'" x-cloak class="grid md:grid-cols-2 gap-4">
+            <div class="font-mono text-[13px] text-mist">→ MVC + Service Layer + DTOs</div>
+            <div class="font-mono text-[13px] text-mist">→ Eloquent polymorphic relationships</div>
+            <div class="font-mono text-[13px] text-mist">→ Tenant middleware on every request</div>
+            <div class="font-mono text-[13px] text-mist">→ Dynamic filesystem / cache isolation per tenant</div>
+          </div>
+
+          <div x-show="tab==='security'" x-cloak class="grid md:grid-cols-2 gap-4">
+            <div class="font-mono text-[13px] text-mist">→ Custom multi-tenant OAuth flow</div>
+            <div class="font-mono text-[13px] text-mist">→ AES-256 token encryption at rest</div>
+            <div class="font-mono text-[13px] text-mist">→ Anti-hijacking session telemetry</div>
+            <div class="font-mono text-[13px] text-mist">→ Tenant-scoped authorization on every query</div>
+          </div>
+
+          <div x-show="tab==='performance'" x-cloak class="grid md:grid-cols-2 gap-4">
+            <div class="font-mono text-[13px] text-mist">→ Eager loading — zero N+1 by default</div>
+            <div class="font-mono text-[13px] text-mist">→ Cache stampede prevention via jitter</div>
+            <div class="font-mono text-[13px] text-mist">→ Deferrable service providers on cold boot</div>
+            <div class="font-mono text-[13px] text-mist">→ Redis-backed tenant cache partitioning</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STACK ─────────────────────────────────────────────────── -->
+  <section id="stack" class="px-6 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto">
+      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">[ 03 ] Stack</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
+        Tools I reach for, and why.
+      </h2>
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass glow-trace rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Laravel 12</p>
+          <p class="font-mono text-[11px] text-mist mt-1">core framework</p>
+        </div>
+        <div class="glass glow-trace rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">PHP 8.2+</p>
+          <p class="font-mono text-[11px] text-mist mt-1">language</p>
+        </div>
+        <div class="glass glow-signal rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Redis</p>
+          <p class="font-mono text-[11px] text-mist mt-1">cache / queues</p>
+        </div>
+        <div class="glass glow-signal rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">MySQL</p>
+          <p class="font-mono text-[11px] text-mist mt-1">primary store</p>
+        </div>
+        <div class="glass glow-trace rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Tailwind v4</p>
+          <p class="font-mono text-[11px] text-mist mt-1">styling</p>
+        </div>
+        <div class="glass glow-trace rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Alpine.js</p>
+          <p class="font-mono text-[11px] text-mist mt-1">interactivity</p>
+        </div>
+        <div class="glass glow-signal rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Blade</p>
+          <p class="font-mono text-[11px] text-mist mt-1">templating</p>
+        </div>
+        <div class="glass glow-signal rounded-xl p-5">
+          <p class="font-display font-medium text-[15px]">Filament</p>
+          <p class="font-mono text-[11px] text-mist mt-1">admin panels</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ──────────────────────────────────────────────── -->
+  <section id="contact" class="px-6 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto grid md:grid-cols-2 gap-14 items-start">
+      <div>
+        <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">[ 04 ] Contact</p>
+        <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[440px]">
+          Open to remote backend roles and contract work.
+        </h2>
+        <p class="text-mist text-[15px] mt-5 leading-relaxed max-w-[440px]">
+          Based in Cairo (UTC+2) — comfortable working-hours overlap with European teams.
+          Reply within a day, usually faster.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 font-mono text-[13px]">
+          <a href="mailto:0xm4r5h4l@duck.com"
+            class="hover:text-trace transition">0xm4r5h4l@duck.com</a>
+          <a href="https://github.com/0xM4r5h4l" target="_blank" rel="noopener"
+            class="hover:text-trace transition">github.com/0xM4r5h4l</a>
+          <a href="https://linkedin.com/in/mustafa-abdelrazek" target="_blank" rel="noopener"
+            class="hover:text-trace transition">linkedin.com/in/mustafa-abdelrazek</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="px-6 py-10 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto flex flex-col md:flex-row justify-between gap-3 font-mono text-[11px] text-mist">
+      <span>© <span id="year"></span> Mostafa Abdelrazek — built with Laravel, Tailwind &amp; Alpine</span>
+      <span>Cairo, EG · UTC+2</span>
+    </div>
+  </footer>
+
+  <script>
+    // Dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll-reveal (respects prefers-reduced-motion via CSS)
+    document.addEventListener('DOMContentLoaded', () => {
+      const obs = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add('in');
+        }),
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+    });
+  </script>
+
+</body>
+</html>

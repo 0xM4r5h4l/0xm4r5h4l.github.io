@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mostafa Abdelrazek — Laravel Backend Developer</title>
-  <meta name="description"
-    content="Laravel backend developer specializing in multi-tenant SaaS architecture, service-layer design, and security-first systems." />
+  <meta name="description" content="Junior Laravel backend developer. Former web pentester with 3 IBM-confirmed HackerOne disclosures. Building multi-tenant SaaS from Cairo, UTC+2." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -23,10 +17,11 @@
           fontFamily: {
             display: ['Space Grotesk', 'sans-serif'],
             mono:    ['JetBrains Mono', 'monospace'],
+            body:    ['Inter', 'sans-serif'],
           },
           colors: {
             void:    '#090A0F',
-            surface: '#11131A',
+            surface: '#0E1018',
             ink:     '#E7E9EE',
             mist:    '#8A91A6',
             signal:  '#FFB454',
@@ -37,86 +32,160 @@
     }
   </script>
 
-  <!-- Custom CSS -->
   <style>
     :root {
-      --void:    #090A0F;
-      --surface: #11131A;
-      --line:    rgba(148, 163, 184, 0.14);
-      --ink:     #E7E9EE;
-      --mist:    #8A91A6;
-      --signal:  #FFB454;
-      --trace:   #56D2C0;
+      --void:   #090A0F;
+      --line:   rgba(148,163,184,0.11);
+      --ink:    #E7E9EE;
+      --mist:   #8A91A6;
+      --signal: #FFB454;
+      --trace:  #56D2C0;
     }
 
-    html, body { background: var(--void); color: var(--ink); }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background: var(--void); color: var(--ink); font-family: 'Inter', sans-serif; margin: 0; }
 
+    /* Background layers */
+    .dot-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(148,163,184,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .blob { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+    .blob-teal  { width:640px; height:640px; background:rgba(86,210,192,0.052); top:-180px; right:-140px; }
+    .blob-amber { width:520px; height:520px; background:rgba(255,180,84,0.042); bottom:80px; left:-160px; }
+
+    /* Glass */
     .glass {
-      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+      background: linear-gradient(140deg, rgba(255,255,255,0.055), rgba(255,255,255,0.016));
       border: 1px solid var(--line);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     }
-
+    .glass-strong {
+      background: linear-gradient(140deg, rgba(255,255,255,0.072), rgba(255,255,255,0.022));
+      border: 1px solid rgba(148,163,184,0.17);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+    }
     .hairline { border-color: var(--line) !important; }
 
-    .glow-signal { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
-    .glow-signal:hover {
-      box-shadow: 0 0 0 1px rgba(255,180,84,0.25), 0 18px 40px -16px rgba(255,180,84,0.35);
-      border-color: rgba(255,180,84,0.4) !important;
-      transform: translateY(-2px);
+    /* Card hover */
+    .card { transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
+    .card-t:hover {
+      transform: translateY(-3px);
+      border-color: rgba(86,210,192,0.3) !important;
+      box-shadow: 0 22px 45px -18px rgba(86,210,192,0.16), 0 0 0 1px rgba(86,210,192,0.12);
+    }
+    .card-s:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,180,84,0.3) !important;
+      box-shadow: 0 22px 45px -18px rgba(255,180,84,0.16), 0 0 0 1px rgba(255,180,84,0.12);
     }
 
-    .glow-trace { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
-    .glow-trace:hover {
-      box-shadow: 0 0 0 1px rgba(86,210,192,0.25), 0 18px 40px -16px rgba(86,210,192,0.35);
-      border-color: rgba(86,210,192,0.4) !important;
-      transform: translateY(-2px);
+    /* Colour utilities */
+    .text-trace  { color: var(--trace); }
+    .text-signal { color: var(--signal); }
+    .text-mist   { color: var(--mist); }
+
+    /* Gradient headline */
+    .grad {
+      background: linear-gradient(118deg, var(--ink) 40%, var(--trace) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    /* Animated ping dot */
+    /* IBM badge — signature element */
+    .ibm-badge {
+      background: linear-gradient(135deg, rgba(255,180,84,0.09), rgba(255,180,84,0.03));
+      border: 1px solid rgba(255,180,84,0.22);
+      position: relative; overflow: hidden;
+    }
+    .ibm-badge::after {
+      content: ''; position: absolute; top:0; left:-120%; width:55%; height:100%;
+      background: linear-gradient(90deg, transparent, rgba(255,180,84,0.08), transparent);
+      animation: shimmer 3.6s ease-in-out infinite;
+    }
+    @keyframes shimmer { to { left: 200%; } }
+
+    /* Timeline connector */
+    .timeline-line { background: linear-gradient(180deg, rgba(255,180,84,0.5), rgba(86,210,192,0.5)); }
+
+    /* Ping dot */
     .dot-ping { position: relative; }
     .dot-ping::before {
       content: ''; position: absolute; inset: 0; border-radius: 50%;
-      background: var(--trace);
-      animation: ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      background: var(--trace); animation: ping 2.3s cubic-bezier(0,0,0.2,1) infinite;
     }
-    @keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+    @keyframes ping { 75%,100%{ transform:scale(2.6); opacity:0; } }
 
     /* Terminal cursor */
     .cursor::after {
-      content: '▌'; color: var(--trace); margin-left: 2px;
+      content: '▌'; color: var(--trace); margin-left: 1px;
       animation: blink 1s steps(1) infinite;
     }
-    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes blink { 50%{ opacity:0; } }
 
     /* Scroll reveal */
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
-    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay:.08s; } .d2 { transition-delay:.16s; } .d3 { transition-delay:.24s; }
 
-    /* Hide Alpine x-cloak elements until JS initialises */
-    [x-cloak] { display: none !important; }
+    /* Chip */
+    .chip {
+      background: rgba(255,255,255,0.038); border: 1px solid var(--line);
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .chip:hover { background:rgba(86,210,192,0.09); border-color:rgba(86,210,192,0.3); color:var(--trace); }
 
-    ::selection { background: rgba(86, 210, 192, 0.3); }
+    /* Tab underline */
+    .tab { border-bottom: 2px solid transparent; transition: color .18s, border-color .18s; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { transition: none; transform: none; opacity: 1; }
-      .dot-ping::before { animation: none; }
+    /* Stat box */
+    .stat { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); }
+
+    /* Progress bar */
+    .bar { height:100%; border-radius:9999px; }
+
+    /* Contact link */
+    .clink { transition: color .2s; }
+    .clink:hover { color: var(--trace); }
+    .clink-icon {
+      background:rgba(255,255,255,0.04); border:1px solid var(--line);
+      transition: border-color .2s;
+    }
+    .clink:hover .clink-icon { border-color:rgba(86,210,192,0.3); }
+
+    /* Sections above bg */
+    section, header, footer { position: relative; z-index: 1; }
+
+    /* Alpine */
+    [x-cloak] { display:none !important; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--void); }
+    ::-webkit-scrollbar-thumb { background:rgba(148,163,184,0.18); border-radius:3px; }
+
+    ::selection { background:rgba(86,210,192,0.22); }
+
+    @media (prefers-reduced-motion:reduce) {
+      .reveal { transition:none; transform:none; opacity:1; }
+      .dot-ping::before { animation:none; }
+      .ibm-badge::after { animation:none; }
     }
   </style>
 
-  <!-- Alpine: register components BEFORE the CDN script initialises -->
   <script>
     document.addEventListener('alpine:init', () => {
 
-      // Hero terminal — types out architecture log lines on a loop
       Alpine.data('terminal', () => ({
         lines: [
-          { p: '$', t: 'php artisan tenant:resolve --domain=acme.app', c: '' },
-          { p: '✓', t: 'Tenant context bound · middleware validated',   c: 'text-trace' },
-          { p: '✓', t: 'Cache warmed · stampede jitter applied (12s)',  c: 'text-trace' },
-          { p: '✓', t: 'OAuth token verified · AES-256 decrypt',        c: 'text-signal' },
-          { p: '✓', t: 'Eloquent: 0 N+1 queries · eager loaded',        c: 'text-trace' },
-          { p: '✓', t: 'DTO mapped → Service Layer → Response (118ms)', c: 'text-signal' },
+          { p:'$', t:'php artisan tenant:resolve --domain=acme.app',       c:'' },
+          { p:'✓', t:'Host matched · TenantsMiddleware resolved',           c:'text-trace' },
+          { p:'✓', t:'Filesystem rebound → /storage/tenants/a1b2c3/',      c:'text-trace' },
+          { p:'✓', t:'Cache prefix → tenant_a1b2c3_ · jitter 347s',        c:'text-trace' },
+          { p:'✓', t:'HMAC-SHA256 session verified · no anomaly detected',  c:'text-signal' },
+          { p:'✓', t:'AES-256 OAuth token decrypted · scope valid',         c:'text-signal' },
+          { p:'✓', t:'Eloquent: 0 N+1 · relationLoaded() guards active',    c:'text-trace' },
+          { p:'✓', t:'DTO → ServiceLayer → Response 118ms',                 c:'text-trace' },
         ],
         visible: [],
         init() { this.run(); },
@@ -124,102 +193,123 @@
           this.visible = [];
           let i = 0;
           const step = () => {
-            if (i < this.lines.length) {
-              this.visible.push(this.lines[i++]);
-              setTimeout(step, 480);
-            } else {
-              setTimeout(() => this.run(), 2600);
-            }
+            if (i < this.lines.length) { this.visible.push(this.lines[i++]); setTimeout(step, 430); }
+            else { setTimeout(() => this.run(), 2800); }
           };
           step();
         },
       }));
 
-      // Project section tabs
-      Alpine.data('projectTabs', () => ({ tab: 'overview' }));
-
-      // Hero entrance animation flag
-      Alpine.data('heroReveal', () => ({
-        shown: false,
-        init() { setTimeout(() => (this.shown = true), 80); },
-      }));
+      Alpine.data('tabs', () => ({ tab: 'overview' }));
+      Alpine.data('hero', () => ({ on: false, init() { setTimeout(() => this.on = true, 90); } }));
     });
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
 
-<body class="antialiased bg-void text-ink" x-data>
+<body>
+  <div class="dot-grid"></div>
+  <div class="blob blob-teal"></div>
+  <div class="blob blob-amber"></div>
 
-  <!-- ─── NAV ──────────────────────────────────────────────────── -->
+  <!-- NAV -->
   <header class="fixed top-0 inset-x-0 z-50">
-    <div class="max-w-[1140px] mx-auto px-6">
-      <div class="glass rounded-2xl mt-4 px-5 py-3 flex items-center justify-between">
-        <a href="#" class="font-display font-semibold text-[15px] tracking-tight">
+    <div class="max-w-[1140px] mx-auto px-5">
+      <nav class="glass rounded-2xl mt-4 px-5 py-3.5 flex items-center justify-between">
+        <a href="#" class="font-display font-semibold text-[15px] text-ink tracking-tight">
           0xM4r5h4l<span class="text-trace">.</span>dev
         </a>
-        <nav class="hidden md:flex items-center gap-8 font-mono text-[12px] uppercase tracking-widest text-mist">
-          <a href="#approach" class="hover:text-ink transition">Approach</a>
-          <a href="#projects" class="hover:text-ink transition">Projects</a>
-          <a href="#stack"    class="hover:text-ink transition">Stack</a>
-          <a href="#contact"  class="hover:text-ink transition">Contact</a>
-        </nav>
+        <div class="hidden md:flex items-center gap-7 font-mono text-[12px] uppercase tracking-widest text-mist">
+          <a href="#story"    class="hover:text-trace transition-colors">Story</a>
+          <a href="#approach" class="hover:text-trace transition-colors">Approach</a>
+          <a href="#projects" class="hover:text-trace transition-colors">Projects</a>
+          <a href="#stack"    class="hover:text-trace transition-colors">Stack</a>
+          <a href="#contact"  class="hover:text-trace transition-colors">Contact</a>
+        </div>
         <div class="flex items-center gap-2 font-mono text-[11px] text-mist">
-          <span class="dot-ping inline-block w-1.5 h-1.5 rounded-full bg-trace"></span>
+          <span class="dot-ping inline-block w-1.5 h-1.5 rounded-full bg-trace flex-shrink-0"></span>
           OPEN_TO_REMOTE
         </div>
-      </div>
+      </nav>
     </div>
   </header>
 
-  <!-- ─── HERO ─────────────────────────────────────────────────── -->
-  <section class="relative pt-40 pb-24 md:pt-48 md:pb-32 px-6 overflow-hidden">
+  <!-- HERO -->
+  <section class="relative pt-40 pb-28 md:pt-48 md:pb-36 px-5">
     <div class="max-w-[1140px] mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-14 items-center">
 
-      <div x-data="heroReveal" :class="shown && 'in'" class="reveal">
-        <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-5">
-          [ STATUS: BACKEND_FOCUSED ]
-        </p>
-        <h1 class="font-display font-semibold text-[40px] leading-[1.08] md:text-[58px] md:leading-[1.05] tracking-tight">
-          Laravel Backend<br />Developer, built for<br />
-          <span class="text-trace">multi-tenant</span> scale.
+      <div x-data="hero" :class="on && 'in'" class="reveal">
+
+        <!-- Status -->
+        <div class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest
+                    text-signal bg-signal/10 border border-signal/20 rounded-full px-4 py-1.5 mb-7">
+          <span class="w-1.5 h-1.5 rounded-full bg-signal animate-pulse flex-shrink-0"></span>
+          Available for remote backend roles
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-display font-semibold text-[38px] leading-[1.07] md:text-[52px] md:leading-[1.06] tracking-tight">
+          Junior Laravel<br />Developer,<br />
+          <span class="grad">raised on security.</span>
         </h1>
-        <p class="mt-6 text-mist text-[16px] md:text-[17px] leading-relaxed max-w-[480px]">
-          I design and ship backend systems — tenant isolation, service-layer architecture, and
-          security primitives — for SaaS products that can't afford to get this wrong.
+
+        <p class="mt-6 text-mist text-[15px] leading-relaxed max-w-[430px]">
+          One year building Laravel backends — after years finding vulnerabilities in them.
+          I write code the way I used to read attack surfaces.
         </p>
-        <div class="mt-9 flex flex-wrap items-center gap-4">
+
+        <!-- IBM badge -->
+        <div class="ibm-badge rounded-2xl px-5 py-4 mt-8 flex items-start gap-4 max-w-[420px]">
+          <div class="flex-shrink-0 mt-0.5 w-9 h-9 rounded-xl bg-signal/15 border border-signal/30
+                      flex items-center justify-center font-mono text-[10px] font-bold text-signal">H1</div>
+          <div>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-signal">IBM · HackerOne VDP · Confirmed</p>
+            <p class="font-display font-semibold text-[17px] text-ink mt-0.5">3 Vulnerabilities Disclosed</p>
+            <p class="font-mono text-[12px] text-mist mt-1">XSS &amp; Auth Bypass — acknowledged by IBM's security team</p>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-wrap gap-3">
           <a href="#projects"
-            class="font-mono text-[13px] uppercase tracking-wide bg-trace text-[#06231f] font-medium px-6 py-3 rounded-xl hover:brightness-110 transition">
-            View Architecture
+             class="font-mono text-[13px] uppercase tracking-wide bg-trace text-[#06231f]
+                    font-semibold px-6 py-3 rounded-xl hover:brightness-110 transition-all">
+            View Projects
           </a>
-          <a href="cv.pdf"
-            class="font-mono text-[13px] uppercase tracking-wide hairline border px-6 py-3 rounded-xl text-ink hover:bg-white/5 transition">
+          <a href="cv.pdf" download
+             class="font-mono text-[13px] uppercase tracking-wide glass border px-6 py-3 rounded-xl
+                    text-ink hover:border-trace/40 hover:text-trace transition-all">
             Download CV
           </a>
         </div>
-        <div class="mt-12 flex items-center gap-8 font-mono text-[12px] text-mist">
-          <span>PHP 8.2+</span>
-          <span class="w-1 h-1 rounded-full bg-mist/40"></span>
-          <span>Laravel 12</span>
-          <span class="w-1 h-1 rounded-full bg-mist/40"></span>
+
+        <!-- Chips -->
+        <div class="mt-9 flex flex-wrap gap-2">
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">PHP 8.2+</span>
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">Laravel 12</span>
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">Redis</span>
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">Docker</span>
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">Pest PHP</span>
+          <span class="chip font-mono text-[11px] text-mist px-3 py-1.5 rounded-full">OWASP</span>
         </div>
       </div>
 
       <!-- Terminal -->
-      <div x-data="terminal" class="glass rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-        <div class="flex items-center gap-2 px-4 py-3 border-b hairline border">
+      <div x-data="terminal" class="glass-strong rounded-2xl overflow-hidden shadow-2xl shadow-black/60 reveal d1">
+        <div class="flex items-center gap-2 px-4 py-3 border-b hairline border bg-white/[0.018]">
           <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></span>
           <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
           <span class="w-2.5 h-2.5 rounded-full bg-[#28c840]"></span>
-          <span class="font-mono text-[11px] text-mist ml-3">tenant-resolver — zsh</span>
+          <span class="font-mono text-[11px] text-mist ml-3">tenant-resolver</span>
+          <span class="ml-auto font-mono text-[10px] text-mist/40">laravel 12 · php 8.2</span>
         </div>
-        <div class="p-5 font-mono text-[13px] leading-[1.9] min-h-[260px]">
+        <div class="p-5 font-mono text-[12px] leading-[1.95] min-h-[280px]">
           <template x-for="(line, idx) in visible" :key="idx">
-            <div>
-              <span :class="line.p === '$' ? 'text-mist' : line.c">
+            <div class="flex gap-2">
+              <span :class="line.p === '$' ? 'text-mist' : line.c" class="flex-shrink-0">
                 [<span x-text="line.p"></span>]
               </span>
-              <span :class="line.c || 'text-ink'" x-text="' ' + line.t"></span>
+              <span :class="line.c || 'text-ink/80'" x-text="line.t"></span>
             </div>
           </template>
           <span class="cursor"></span>
@@ -229,39 +319,141 @@
     </div>
   </section>
 
-  <!-- ─── APPROACH ─────────────────────────────────────────────── -->
-  <section id="approach" class="px-6 py-24 border-t hairline border">
+  <!-- THE STORY (security background → development) -->
+  <section id="story" class="px-5 py-24 border-t hairline border">
     <div class="max-w-[1140px] mx-auto">
-      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">[ 01 ] Approach</p>
-      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
+
+      <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">Background</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[560px] text-ink">
+        Started on the other side<br />of the screen.
+      </h2>
+
+      <div class="mt-12 grid md:grid-cols-[1fr_1.2fr] gap-10 items-start">
+
+        <!-- Timeline -->
+        <div class="relative pl-8">
+          <div class="timeline-line absolute left-3 top-2 bottom-2 w-px"></div>
+
+          <!-- Node 1 -->
+          <div class="relative mb-10">
+            <div class="absolute -left-8 top-1 w-3 h-3 rounded-full bg-signal border-2 border-void flex-shrink-0"></div>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-2">Before Laravel</p>
+            <h3 class="font-display font-semibold text-[16px] text-ink">Web Pentester &amp; Bug Hunter</h3>
+            <p class="text-mist text-[13px] mt-2 leading-relaxed">
+              Spent time doing web application penetration testing and bug bounty hunting —
+              learning how real systems fail under real attacks. XSS, auth bypass,
+              information disclosure, broken access control. Not from a textbook.
+            </p>
+          </div>
+
+          <!-- Node 2 (IBM) -->
+          <div class="relative mb-10">
+            <div class="absolute -left-8 top-1 w-3 h-3 rounded-full bg-signal border-2 border-void flex-shrink-0"></div>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-2">The IBM Chapter</p>
+            <div class="ibm-badge rounded-xl p-4">
+              <p class="font-display font-semibold text-[15px] text-ink">3 Confirmed Disclosures — IBM VDP</p>
+              <p class="text-mist text-[13px] mt-1.5 leading-relaxed">
+                Found and responsibly disclosed XSS and authentication weaknesses in IBM's
+                production systems through their official HackerOne program.
+                All 3 confirmed by IBM's security team.
+              </p>
+              <a href="https://hackerone.com/0xM4r5h4l" target="_blank" rel="noopener"
+                 class="inline-block mt-3 font-mono text-[11px] text-signal hover:brightness-110 transition">
+                hackerone.com/0xM4r5h4l →
+              </a>
+            </div>
+          </div>
+
+          <!-- Node 3 -->
+          <div class="relative">
+            <div class="absolute -left-8 top-1 w-3 h-3 rounded-full bg-trace border-2 border-void flex-shrink-0"></div>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-2">Now</p>
+            <h3 class="font-display font-semibold text-[16px] text-ink">Junior Laravel Developer</h3>
+            <p class="text-mist text-[13px] mt-2 leading-relaxed">
+              One year building Laravel backends — applying what I learned attacking systems
+              to how I design and test them. The security mindset doesn't switch off.
+              It shows up in every middleware, every auth flow, every query.
+            </p>
+          </div>
+        </div>
+
+        <!-- How it translates to code -->
+        <div class="flex flex-col gap-4">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-mist mb-1">What that background produces</p>
+
+          <div class="glass card card-s rounded-2xl p-6">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Tokens</p>
+            <p class="font-display font-semibold text-[15px] text-ink">AES-256 at rest, not just in transit</p>
+            <p class="text-mist text-[13px] mt-2 leading-relaxed">
+              OAuth tokens in my SaaS project are encrypted before storage.
+              I know what happens when they're not.
+            </p>
+          </div>
+
+          <div class="glass card card-t rounded-2xl p-6">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Sessions</p>
+            <p class="font-display font-semibold text-[15px] text-ink">HMAC-SHA256 + device fingerprinting</p>
+            <p class="text-mist text-[13px] mt-2 leading-relaxed">
+              Every session is integrity-checked against device fingerprint —
+              because I've seen how session fixation actually plays out.
+            </p>
+          </div>
+
+          <div class="glass card card-t rounded-2xl p-6">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Input handling</p>
+            <p class="font-display font-semibold text-[15px] text-ink">OWASP Top 10 from the first line</p>
+            <p class="text-mist text-[13px] mt-2 leading-relaxed">
+              XSS and SQLi prevention are in the architecture layer —
+              not a checklist I run through before shipping.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section id="approach" class="px-5 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto">
+
+      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">Approach</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[540px] text-ink">
         Architecture decisions, not just working code.
       </h2>
-      <div class="mt-12 grid md:grid-cols-3 gap-6">
 
-        <div class="glass glow-signal rounded-2xl p-7">
-          <span class="font-mono text-[11px] text-signal">[ TYPE_SAFETY ]</span>
-          <h3 class="font-display font-medium text-[18px] mt-4">DTOs over arrays</h3>
-          <p class="text-mist text-[14px] mt-3 leading-relaxed">
-            Data crossing a layer boundary is typed and validated at the edge — not a
-            loosely-shaped array that breaks silently three calls later.
+      <div class="mt-12 grid md:grid-cols-3 gap-5">
+
+        <div class="glass card card-s rounded-2xl p-7 reveal">
+          <div class="w-9 h-9 rounded-xl bg-signal/15 border border-signal/25 flex items-center justify-center
+                      font-mono text-[10px] font-bold text-signal mb-5">DTO</div>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Type Safety</p>
+          <h3 class="font-display font-semibold text-[16px] text-ink">DTOs over arrays</h3>
+          <p class="text-mist text-[13px] mt-3 leading-relaxed">
+            Data crossing a layer boundary is typed at the edge.
+            Not a loose array that fails silently three calls later.
           </p>
         </div>
 
-        <div class="glass glow-trace rounded-2xl p-7">
-          <span class="font-mono text-[11px] text-trace">[ SEPARATION ]</span>
-          <h3 class="font-display font-medium text-[18px] mt-4">Service Layer</h3>
-          <p class="text-mist text-[14px] mt-3 leading-relaxed">
-            Controllers stay thin. Business logic lives in services that are testable
-            in isolation from HTTP and Eloquent.
+        <div class="glass card card-t rounded-2xl p-7 reveal d1">
+          <div class="w-9 h-9 rounded-xl bg-trace/15 border border-trace/25 flex items-center justify-center
+                      font-mono text-[10px] font-bold text-trace mb-5">SVC</div>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Separation</p>
+          <h3 class="font-display font-semibold text-[16px] text-ink">Service Layer</h3>
+          <p class="text-mist text-[13px] mt-3 leading-relaxed">
+            Controllers handle HTTP. Business logic lives in services —
+            testable in isolation from the framework.
           </p>
         </div>
 
-        <div class="glass glow-signal rounded-2xl p-7">
-          <span class="font-mono text-[11px] text-signal">[ SECURITY_FIRST ]</span>
-          <h3 class="font-display font-medium text-[18px] mt-4">Assume hostile tenants</h3>
-          <p class="text-mist text-[14px] mt-3 leading-relaxed">
-            Multi-tenant systems fail at the boundary between tenants. I design
-            isolation as the default, not a patch.
+        <div class="glass card card-s rounded-2xl p-7 reveal d2">
+          <div class="w-9 h-9 rounded-xl bg-signal/15 border border-signal/25 flex items-center justify-center
+                      font-mono text-[10px] font-bold text-signal mb-5">ISO</div>
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Multi-Tenancy</p>
+          <h3 class="font-display font-semibold text-[16px] text-ink">Isolation by default</h3>
+          <p class="text-mist text-[13px] mt-3 leading-relaxed">
+            Multi-tenant systems fail at tenant boundaries.
+            Isolation is the design default, not a patch applied later.
           </p>
         </div>
 
@@ -269,173 +461,323 @@
     </div>
   </section>
 
-  <!-- ─── PROJECTS ─────────────────────────────────────────────── -->
-  <section id="projects" class="px-6 py-24 border-t hairline border">
+  <!-- PROJECTS -->
+  <section id="projects" class="px-5 py-24 border-t hairline border">
     <div class="max-w-[1140px] mx-auto">
-      <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">[ 02 ] Projects</p>
-      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
-        The system this whole site is talking about.
+
+      <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">Projects</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[560px] text-ink">
+        Two backends. Both built with security as a requirement.
       </h2>
 
-      <div x-data="projectTabs" class="mt-12 glass rounded-2xl overflow-hidden">
+      <!-- SaaS Platform -->
+      <div x-data="tabs" class="mt-10 glass-strong rounded-2xl overflow-hidden">
 
-        <div class="flex items-center justify-between flex-wrap gap-4 px-7 pt-7">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-7 pt-7">
           <div>
-            <h3 class="font-display font-medium text-[20px]">Multi-Tenant SaaS Platform</h3>
-            <p class="text-mist text-[13px] mt-1">
-              Enterprise engagement · NDA — architecture described, implementation private
-            </p>
+            <div class="flex items-center flex-wrap gap-3 mb-1">
+              <h3 class="font-display font-semibold text-[19px] text-ink">Multi-Tenant SaaS Platform</h3>
+              <span class="font-mono text-[10px] uppercase tracking-wide px-2.5 py-1
+                           rounded-full bg-trace/10 border border-trace/25 text-trace">In Development</span>
+            </div>
+            <p class="text-mist text-[13px]">Laravel 12 · PHP 8.2+ · MySQL · Redis · Filament v5 · Pest PHP · Docker</p>
           </div>
-          <span class="font-mono text-[11px] uppercase tracking-wide px-3 py-1.5 rounded-full hairline border text-mist">
-            Confidential / Production
-          </span>
+          <span class="font-mono text-[11px] uppercase tracking-wide px-3 py-1.5
+                       rounded-full hairline border text-mist whitespace-nowrap">Confidential</span>
         </div>
 
-        <!-- Tabs -->
-        <div class="flex gap-1 px-7 mt-7 font-mono text-[12px] uppercase tracking-wide overflow-x-auto">
+        <div class="flex gap-0 px-7 mt-6 overflow-x-auto border-b hairline border">
           <button @click="tab='overview'"
-            :class="tab==='overview' ? 'text-ink border-trace' : 'text-mist border-transparent'"
-            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Overview</button>
+            :class="tab==='overview'     ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="tab px-5 py-3 font-mono text-[12px] uppercase tracking-wide whitespace-nowrap">Overview</button>
           <button @click="tab='architecture'"
             :class="tab==='architecture' ? 'text-ink border-trace' : 'text-mist border-transparent'"
-            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Architecture</button>
+            class="tab px-5 py-3 font-mono text-[12px] uppercase tracking-wide whitespace-nowrap">Architecture</button>
           <button @click="tab='security'"
-            :class="tab==='security' ? 'text-ink border-trace' : 'text-mist border-transparent'"
-            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Security</button>
+            :class="tab==='security'     ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="tab px-5 py-3 font-mono text-[12px] uppercase tracking-wide whitespace-nowrap">Security</button>
           <button @click="tab='performance'"
-            :class="tab==='performance' ? 'text-ink border-trace' : 'text-mist border-transparent'"
-            class="px-4 py-3 border-b-2 transition whitespace-nowrap">Performance</button>
+            :class="tab==='performance'  ? 'text-ink border-trace' : 'text-mist border-transparent'"
+            class="tab px-5 py-3 font-mono text-[12px] uppercase tracking-wide whitespace-nowrap">Performance</button>
         </div>
 
-        <!-- Tab panels -->
-        <div class="px-7 py-8 border-t hairline border mt-1">
+        <div class="px-7 py-8">
 
           <div x-show="tab==='overview'" x-cloak>
-            <p class="text-mist text-[15px] leading-relaxed max-w-[680px]">
-              A multi-tenant SaaS platform supporting three distinct roles — System Owner, Merchant,
-              and Client — each operating within strictly scoped permissions, data, and workflows.
-              Built to handle onboarding, inventory, and order logic at a structure similar to
-              Shopify's tenancy model.
+            <p class="text-mist text-[14px] leading-relaxed max-w-[660px] mb-7">
+              Three roles — System Owner, Merchant, Client — each with strictly scoped data
+              and permissions. Tenant isolation enforced at middleware level before any query runs.
+              Designed to solve the same structural problems that multi-tenant platforms face at scale.
             </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div class="stat rounded-xl p-4 text-center">
+                <p class="font-display font-bold text-[24px] text-trace">3</p>
+                <p class="font-mono text-[10px] text-mist mt-1">Scoped roles</p>
+              </div>
+              <div class="stat rounded-xl p-4 text-center">
+                <p class="font-display font-bold text-[24px] text-trace">0</p>
+                <p class="font-mono text-[10px] text-mist mt-1">Cross-tenant leaks</p>
+              </div>
+              <div class="stat rounded-xl p-4 text-center">
+                <p class="font-display font-bold text-[24px] text-signal">8</p>
+                <p class="font-mono text-[10px] text-mist mt-1">Pest tests, growing</p>
+              </div>
+              <div class="stat rounded-xl p-4 text-center">
+                <p class="font-display font-bold text-[15px] text-signal mt-1">AES-256</p>
+                <p class="font-mono text-[10px] text-mist mt-1">Token encryption</p>
+              </div>
+            </div>
           </div>
 
-          <div x-show="tab==='architecture'" x-cloak class="grid md:grid-cols-2 gap-4">
-            <div class="font-mono text-[13px] text-mist">→ MVC + Service Layer + DTOs</div>
-            <div class="font-mono text-[13px] text-mist">→ Eloquent polymorphic relationships</div>
-            <div class="font-mono text-[13px] text-mist">→ Tenant middleware on every request</div>
-            <div class="font-mono text-[13px] text-mist">→ Dynamic filesystem / cache isolation per tenant</div>
+          <div x-show="tab==='architecture'" x-cloak class="grid md:grid-cols-2 gap-3">
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>MVC + Service Layer + DTOs — thin controllers only
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Eloquent polymorphic relationships + eager loading
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>TenantsMiddleware — host resolves tenant before any DB query
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Dynamic filesystem &amp; cache namespace rebinding per tenant
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>BelongsToTenant global scope — all models auto-scoped
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Observer pattern for cache invalidation side-effects
+            </div>
           </div>
 
-          <div x-show="tab==='security'" x-cloak class="grid md:grid-cols-2 gap-4">
-            <div class="font-mono text-[13px] text-mist">→ Custom multi-tenant OAuth flow</div>
-            <div class="font-mono text-[13px] text-mist">→ AES-256 token encryption at rest</div>
-            <div class="font-mono text-[13px] text-mist">→ Anti-hijacking session telemetry</div>
-            <div class="font-mono text-[13px] text-mist">→ Tenant-scoped authorization on every query</div>
+          <div x-show="tab==='security'" x-cloak class="grid md:grid-cols-2 gap-3">
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>HMAC-SHA256 session integrity + device fingerprinting
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>AES-256 OAuth token encryption at rest
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>Dynamic tenant OAuth — no shared client keys across tenants
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>Tenant-scoped Eloquent auth enforced on every query
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>OmniTrackService anti-hijacking telemetry layer
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-signal flex-shrink-0">→</span>Settings-based route gating middleware
+            </div>
           </div>
 
-          <div x-show="tab==='performance'" x-cloak class="grid md:grid-cols-2 gap-4">
-            <div class="font-mono text-[13px] text-mist">→ Eager loading — zero N+1 by default</div>
-            <div class="font-mono text-[13px] text-mist">→ Cache stampede prevention via jitter</div>
-            <div class="font-mono text-[13px] text-mist">→ Deferrable service providers on cold boot</div>
-            <div class="font-mono text-[13px] text-mist">→ Redis-backed tenant cache partitioning</div>
+          <div x-show="tab==='performance'" x-cloak class="grid md:grid-cols-2 gap-3">
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>relationLoaded() guards on all polymorphic accessors — zero N+1
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Cache stampede prevention — randomized expiry jitter ±5min
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Deferrable service providers for faster cold boot
+            </div>
+            <div class="stat rounded-xl p-4 font-mono text-[13px] text-mist flex gap-3">
+              <span class="text-trace flex-shrink-0">→</span>Tenant-scoped Redis namespace per cache pool
+            </div>
           </div>
 
         </div>
       </div>
+
+      <!-- Beacon Bank API -->
+      <div class="mt-5 glass card card-t rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-5">
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-3 mb-2">
+            <h3 class="font-display font-semibold text-[17px] text-ink">Beacon Bank API</h3>
+            <span class="font-mono text-[10px] uppercase tracking-wide px-2.5 py-1
+                         rounded-full bg-mist/10 border border-mist/20 text-mist">Node.js</span>
+          </div>
+          <p class="text-mist text-[13px] mb-4">Node.js · Express · MongoDB · JWT · Mongoose · Jest</p>
+          <div class="flex flex-wrap gap-2 font-mono text-[12px] text-mist">
+            <span class="stat rounded-lg px-3 py-1.5">Atomic transaction handling</span>
+            <span class="stat rounded-lg px-3 py-1.5">5+ OWASP security layers</span>
+            <span class="stat rounded-lg px-3 py-1.5">100% data consistency</span>
+            <span class="stat rounded-lg px-3 py-1.5">Account locking</span>
+            <span class="stat rounded-lg px-3 py-1.5">Security event logging</span>
+          </div>
+        </div>
+        <a href="https://github.com/0xM4r5h4l" target="_blank" rel="noopener"
+           class="flex-shrink-0 font-mono text-[12px] uppercase tracking-wide glass border px-5 py-2.5
+                  rounded-xl text-mist hover:text-trace hover:border-trace/40 transition-all">
+          GitHub →
+        </a>
+      </div>
+
     </div>
   </section>
 
-  <!-- ─── STACK ─────────────────────────────────────────────────── -->
-  <section id="stack" class="px-6 py-24 border-t hairline border">
+  <!-- STACK -->
+  <section id="stack" class="px-5 py-24 border-t hairline border">
     <div class="max-w-[1140px] mx-auto">
-      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">[ 03 ] Stack</p>
-      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[620px]">
+
+      <p class="font-mono text-[12px] uppercase tracking-widest text-trace mb-3">Stack</p>
+      <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[500px] text-ink">
         Tools I reach for, and why.
       </h2>
+
       <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="glass glow-trace rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Laravel 12</p>
-          <p class="font-mono text-[11px] text-mist mt-1">core framework</p>
+        <div class="glass card card-t rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Framework</p>
+          <p class="font-display font-semibold text-[16px] text-ink">Laravel 12</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Core · Sanctum · Queues</p>
         </div>
-        <div class="glass glow-trace rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">PHP 8.2+</p>
-          <p class="font-mono text-[11px] text-mist mt-1">language</p>
+        <div class="glass card card-t rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Language</p>
+          <p class="font-display font-semibold text-[16px] text-ink">PHP 8.2+</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Strict types · Enums · Match</p>
         </div>
-        <div class="glass glow-signal rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Redis</p>
-          <p class="font-mono text-[11px] text-mist mt-1">cache / queues</p>
+        <div class="glass card card-s rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Cache</p>
+          <p class="font-display font-semibold text-[16px] text-ink">Redis</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Queues · Tenant pools</p>
         </div>
-        <div class="glass glow-signal rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">MySQL</p>
-          <p class="font-mono text-[11px] text-mist mt-1">primary store</p>
+        <div class="glass card card-s rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Database</p>
+          <p class="font-display font-semibold text-[16px] text-ink">MySQL</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Indexed FKs · Soft deletes</p>
         </div>
-        <div class="glass glow-trace rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Tailwind v4</p>
-          <p class="font-mono text-[11px] text-mist mt-1">styling</p>
+        <div class="glass card card-t rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">Testing</p>
+          <p class="font-display font-semibold text-[16px] text-ink">Pest PHP</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Feature · Unit · TDD</p>
         </div>
-        <div class="glass glow-trace rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Alpine.js</p>
-          <p class="font-mono text-[11px] text-mist mt-1">interactivity</p>
+        <div class="glass card card-t rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-trace mb-3">DevOps</p>
+          <p class="font-display font-semibold text-[16px] text-ink">Docker</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Compose · GitHub Actions</p>
         </div>
-        <div class="glass glow-signal rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Blade</p>
-          <p class="font-mono text-[11px] text-mist mt-1">templating</p>
+        <div class="glass card card-s rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Admin</p>
+          <p class="font-display font-semibold text-[16px] text-ink">Filament v5</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Panels · Clusters · Forms</p>
         </div>
-        <div class="glass glow-signal rounded-xl p-5">
-          <p class="font-display font-medium text-[15px]">Filament</p>
-          <p class="font-mono text-[11px] text-mist mt-1">admin panels</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── CONTACT ──────────────────────────────────────────────── -->
-  <section id="contact" class="px-6 py-24 border-t hairline border">
-    <div class="max-w-[1140px] mx-auto grid md:grid-cols-2 gap-14 items-start">
-      <div>
-        <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">[ 04 ] Contact</p>
-        <h2 class="font-display font-semibold text-[28px] md:text-[34px] max-w-[440px]">
-          Open to remote backend roles and contract work.
-        </h2>
-        <p class="text-mist text-[15px] mt-5 leading-relaxed max-w-[440px]">
-          Based in Cairo (UTC+2) — comfortable working-hours overlap with European teams.
-          Reply within a day, usually faster.
-        </p>
-        <div class="mt-8 flex flex-col gap-3 font-mono text-[13px]">
-          <a href="mailto:0xm4r5h4l@duck.com"
-            class="hover:text-trace transition">0xm4r5h4l@duck.com</a>
-          <a href="https://github.com/0xM4r5h4l" target="_blank" rel="noopener"
-            class="hover:text-trace transition">github.com/0xM4r5h4l</a>
-          <a href="https://linkedin.com/in/mustafa-abdelrazek" target="_blank" rel="noopener"
-            class="hover:text-trace transition">linkedin.com/in/mustafa-abdelrazek</a>
+        <div class="glass card card-s rounded-xl p-5">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-signal mb-3">Security</p>
+          <p class="font-display font-semibold text-[16px] text-ink">OWASP</p>
+          <p class="font-mono text-[11px] text-mist mt-1">Top 10 · HackerOne VDP</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── FOOTER ───────────────────────────────────────────────── -->
-  <footer class="px-6 py-10 border-t hairline border">
-    <div class="max-w-[1140px] mx-auto flex flex-col md:flex-row justify-between gap-3 font-mono text-[11px] text-mist">
-      <span>© <span id="year"></span> Mostafa Abdelrazek</span>
-      <span>Cairo, EG · UTC+2</span>
+  <!-- CONTACT -->
+  <section id="contact" class="px-5 py-24 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto">
+
+      <p class="font-mono text-[12px] uppercase tracking-widest text-signal mb-3">Contact</p>
+
+      <div class="grid md:grid-cols-2 gap-12 items-start mt-4">
+        <div>
+          <h2 class="font-display font-semibold text-[30px] md:text-[38px] text-ink leading-[1.1]">
+            Open to remote<br />backend roles.
+          </h2>
+          <p class="text-mist text-[15px] mt-5 leading-relaxed max-w-[360px]">
+            Junior position or contract work. Cairo, UTC+2.
+            Full overlap with EU &amp; UK. 4–5hr daily sync for US East Coast.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3">
+            <a href="mailto:0xM4r5h4l@duck.com"
+               class="clink flex items-center gap-3 font-mono text-[13px] text-mist">
+              <span class="clink-icon w-8 h-8 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0">@</span>
+              0xM4r5h4l@duck.com
+            </a>
+            <a href="https://github.com/0xM4r5h4l" target="_blank" rel="noopener"
+               class="clink flex items-center gap-3 font-mono text-[13px] text-mist">
+              <span class="clink-icon w-8 h-8 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0">gh</span>
+              github.com/0xM4r5h4l
+            </a>
+            <a href="https://linkedin.com/in/mustafa-abdelrazek" target="_blank" rel="noopener"
+               class="clink flex items-center gap-3 font-mono text-[13px] text-mist">
+              <span class="clink-icon w-8 h-8 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0">in</span>
+              linkedin.com/in/mustafa-abdelrazek
+            </a>
+            <a href="https://hackerone.com/0xM4r5h4l" target="_blank" rel="noopener"
+               class="flex items-center gap-3 font-mono text-[13px] text-mist hover:text-signal transition-colors">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0
+                           bg-signal/10 border border-signal/25 text-signal">H1</span>
+              hackerone.com/0xM4r5h4l
+            </a>
+          </div>
+        </div>
+
+        <!-- Availability card -->
+        <div class="glass-strong rounded-2xl p-7">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-trace mb-6">Timezone</p>
+
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between font-mono text-[12px] mb-2">
+                <span class="text-mist">EU / UK</span>
+                <span class="text-trace">Full overlap</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                <div class="bar bg-trace" style="width:100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between font-mono text-[12px] mb-2">
+                <span class="text-mist">US East Coast</span>
+                <span class="text-trace">4–5hr sync</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                <div class="bar bg-trace" style="width:65%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between font-mono text-[12px] mb-2">
+                <span class="text-mist">US West Coast</span>
+                <span class="text-signal">Async-first</span>
+              </div>
+              <div class="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                <div class="bar bg-signal" style="width:35%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-7 pt-6 border-t hairline border">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-mist mb-2">Response time</p>
+            <p class="font-display font-semibold text-[22px] text-ink">Within 24 hours</p>
+            <p class="text-mist text-[13px] mt-1">Usually same day.</p>
+          </div>
+
+          <a href="mailto:0xM4r5h4l@duck.com"
+             class="mt-6 flex items-center justify-center font-mono text-[13px] uppercase tracking-wide
+                    bg-trace text-[#06231f] font-semibold px-6 py-3 rounded-xl hover:brightness-110 transition-all">
+            Send a message
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="px-5 py-10 border-t hairline border">
+    <div class="max-w-[1140px] mx-auto flex flex-col md:flex-row justify-between gap-3
+                font-mono text-[11px] text-mist">
+      <span>© <span id="yr"></span> Mostafa Abdelrazek — Junior Laravel Backend Developer</span>
+      <span>Cairo, Egypt · UTC+2 · Available Immediately</span>
     </div>
   </footer>
 
   <script>
-    // Dynamic year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // Scroll-reveal (respects prefers-reduced-motion via CSS)
-    document.addEventListener('DOMContentLoaded', () => {
-      const obs = new IntersectionObserver(
-        (entries) => entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add('in');
-        }),
-        { threshold: 0.15 }
-      );
-      document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
-    });
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
-
 </body>
 </html>
